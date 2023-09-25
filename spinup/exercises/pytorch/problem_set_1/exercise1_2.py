@@ -3,7 +3,6 @@ import torch.nn as nn
 import numpy as np
 from spinup.exercises.pytorch.problem_set_1 import exercise1_1
 from spinup.exercises.pytorch.problem_set_1 import exercise1_2_auxiliary
-
 """
 
 Exercise 1.2: PPO Gaussian Policy
@@ -36,7 +35,7 @@ def mlp(sizes, activation, output_activation=nn.Identity):
     layers=[]
     for i in range(len(sizes)-1):
         act=activation if i < len(sizes)-2 else output_activation
-        layers += [nn.linear(sizes[i],sizes[i+1]),act()]
+        layers += [nn.Linear(sizes[i],sizes[i+1]),act()]
     return nn.Sequential(*layers)
 
 class DiagonalGaussianDistribution:
@@ -51,7 +50,7 @@ class DiagonalGaussianDistribution:
             A PyTorch Tensor of samples from the diagonal Gaussian distribution with
             mean and log_std given by self.mu and self.log_std.
         """
-        return self.mu+torch.exp(self.log_std)*torch.rand_like(self.mu) #from normal distribution
+        return self.mu + torch.exp(self.log_std) * torch.randn_like(self.mu) #from normal distribution
 
     #================================(Given, ignore)==========================================#
     def log_prob(self, value):
@@ -76,7 +75,7 @@ class MLPGaussianActor(nn.Module):
         """
         self.mu_net=mlp(sizes=[obs_dim]+list(hidden_sizes)+[act_dim],activation=activation)#??
 
-        std = -0.5*np.ones(act_dim,type=np.float32)
+        std = -0.5*np.ones(act_dim, dtype=np.float32)
         self.log_std=nn.Parameter(torch.as_tensor(std))#transform form numpy array
         # self.mu_net = 
         pass 

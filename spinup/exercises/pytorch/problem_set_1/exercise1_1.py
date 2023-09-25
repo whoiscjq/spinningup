@@ -12,7 +12,7 @@ distributions, and returns a Tensor containing the log
 likelihoods of those samples.
 
 """
-
+EPS=1e-8
 def gaussian_likelihood(x, mu, log_std):
     """
     Args:
@@ -24,8 +24,8 @@ def gaussian_likelihood(x, mu, log_std):
         Tensor with shape [batch]
     """
     
-    result=-0.5*((x-mu)/torch.exp(log_std))**2-log_std-0.5*np.log(2*np.pi)
-    return result.sum(axis=1)
+    result=-0.5*((x-mu)/torch.exp(log_std)+EPS)**2-log_std-0.5*np.log(2*np.pi)
+    return result.sum(axis=-1)
     #return torch.ones(1)
 
 
